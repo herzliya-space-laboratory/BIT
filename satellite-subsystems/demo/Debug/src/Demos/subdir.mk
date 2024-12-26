@@ -53,10 +53,10 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-src/Demos/%.o: ../src/Demos/%.c
+src/Demos/%.o: ../src/Demos/%.c src/Demos/subdir.mk
 	@echo 'Building file: $<'
 	@echo 'Invoking: Cross ARM C Compiler'
-	arm-none-eabi-gcc -mcpu=arm926ej-s -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=$(REV)' -D'BASE_REVISION_HASH_SHORT=$(REVHASH_SHORT)' -D'BASE_REVISION_HASH=$(REVHASH)' -I"C:\ISIS\workspace_BIT\BIT\satellite-subsystems\demo\src" -I"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/at91/include" -I"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/hal/include" -I"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/freertos/include" -I"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/hcc/include" -I"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/..//satellite-subsystems/include" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -c -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=arm926ej-s -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra -g -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=$(REV)' -D'BASE_REVISION_HASH_SHORT=$(REVHASH_SHORT)' -D'BASE_REVISION_HASH=$(REVHASH)' -I"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/src" -I"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/at91/include" -I"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/hal/include" -I"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/freertos/include" -I"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/hcc/include" -I"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/..//satellite-subsystems/include" -std=gnu11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

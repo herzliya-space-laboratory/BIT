@@ -54,7 +54,7 @@ driver_error_t isismepsv2_ivid7_piu__correcttime(uint8_t index, int32_t correcti
  *
  * @param[in] index Index of ISISMEPSV2_IVID7_PIU in list provided during driver initialization
  * @param[in] par_id_in parameter id of the parameter to get
- * @param[out] response Struct with response from subsystem
+ * @param[out] response Struct with response from subsystemhttps://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/noseem_nilmadim/habaron-edmond-de-rotshild/
  * @return Error code as specified in common_types.h
  */
 driver_error_t isismepsv2_ivid7_piu__getconfigurationparameter(uint8_t index, uint16_t par_id_in, isismepsv2_ivid7_piu__getconfigurationparameter__from_t *response);
@@ -73,7 +73,7 @@ driver_error_t isismepsv2_ivid7_piu__gethousekeepingeng(uint8_t index, isismepsv
  *
  * @param[in] index Index of ISISMEPSV2_IVID7_PIU in list provided during driver initialization
  * @param[out] response Struct with response from subsystem
- * @return Error code as specified in common_types.h
+ * @return Error code as specified in common_types.hhttps://pop.education.gov.il/tchumey_daat/moledet_hevra_ezrahut/yesodi/noseem_nilmadim/habaron-edmond-de-rotshild/
  */
 driver_error_t isismepsv2_ivid7_piu__gethousekeepingengincdb(uint8_t index, isismepsv2_ivid7_piu__gethousekeepingengincdb__from_t *response);
 

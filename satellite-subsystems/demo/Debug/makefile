@@ -15,8 +15,8 @@ RM := rm -rf
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
-ifneq ($(strip $(C_DEPS)),)
--include $(C_DEPS)
+ifneq ($(strip $(SX_DEPS)),)
+-include $(SX_DEPS)
 endif
 ifneq ($(strip $(ASM_DEPS)),)
 -include $(ASM_DEPS)
@@ -24,9 +24,23 @@ endif
 ifneq ($(strip $(S_UPPER_DEPS)),)
 -include $(S_UPPER_DEPS)
 endif
+ifneq ($(strip $(C_DEPS)),)
+-include $(C_DEPS)
+endif
 endif
 
 -include ../makefile.defs
+
+OPTIONAL_TOOL_DEPS := \
+$(wildcard ../makefile.defs) \
+$(wildcard ../makefile.init) \
+$(wildcard ../makefile.targets) \
+
+
+BUILD_ARTIFACT_NAME := satellite-subsystems-demo
+BUILD_ARTIFACT_EXTENSION := elf
+BUILD_ARTIFACT_PREFIX :=
+BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
@@ -37,23 +51,26 @@ satellite-subsystems-demo.siz \
 
 
 # All Target
-all: satellite-subsystems-demo.elf secondary-outputs
+all: main-build
+
+# Main-build Target
+main-build: satellite-subsystems-demo.elf secondary-outputs
 
 # Tool invocations
-satellite-subsystems-demo.elf: $(OBJS) $(USER_OBJS)
+satellite-subsystems-demo.elf: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C Linker'
-	arm-none-eabi-gcc -mcpu=arm926ej-s -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -T C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/at91/linker-scripts/sdram.lds -nostartfiles -Xlinker --gc-sections -L"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/at91/lib" -L"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/freertos/lib" -L"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/hal/lib" -L"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/../..//hal/hcc/lib" -L"C:/ISIS/workspace_BIT/BIT/satellite-subsystems/demo/..//satellite-subsystems/lib" -Wl,-Map,"satellite-subsystems-demo.map" -lc -o "satellite-subsystems-demo.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=arm926ej-s -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra -g -T /home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/at91/linker-scripts/sdram.lds -nostartfiles -Xlinker --gc-sections -L"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/at91/lib" -L"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/freertos/lib" -L"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/hal/lib" -L"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/../..//hal/hcc/lib" -L"/home/sbgmyql/eclipse-workspace/BIT/satellite-subsystems/demo/..//satellite-subsystems/lib" -Wl,-Map,"satellite-subsystems-demo.map" -lc -o "satellite-subsystems-demo.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-satellite-subsystems-demo.bin: satellite-subsystems-demo.elf
+satellite-subsystems-demo.bin: satellite-subsystems-demo.elf makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Invoking: Cross ARM GNU Create Flash Image'
 	arm-none-eabi-objcopy -O binary "satellite-subsystems-demo.elf"  "satellite-subsystems-demo.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-satellite-subsystems-demo.siz: satellite-subsystems-demo.elf
+satellite-subsystems-demo.siz: satellite-subsystems-demo.elf makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Invoking: Cross ARM GNU Print Size'
 	arm-none-eabi-size --format=berkeley "satellite-subsystems-demo.elf"
 	@echo 'Finished building: $@'
@@ -61,12 +78,11 @@ satellite-subsystems-demo.siz: satellite-subsystems-demo.elf
 
 # Other Targets
 clean:
-	-$(RM) $(SECONDARY_SIZE)$(OBJS)$(C_DEPS)$(ASM_DEPS)$(SECONDARY_FLASH)$(S_UPPER_DEPS) satellite-subsystems-demo.elf
+	-$(RM) $(SX_DEPS)$(OBJS)$(SECONDARY_FLASH)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS) satellite-subsystems-demo.elf
 	-@echo ' '
 
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_SIZE)
 
-.PHONY: all clean dependents
-.SECONDARY:
+.PHONY: all clean dependents main-build
 
 -include ../makefile.targets
